@@ -189,7 +189,7 @@
   
         if (chartBuilded == 0) iniciarGrafico();
   
-        
+        /*
         dataset = [
           { uf: 'RJ', pib: 1100, covid:	20 },
           { uf: 'ES', pib: 1000, covid:	8 },
@@ -199,6 +199,14 @@
           { uf: 'PR', pib: 1200, covid:	13 },
           { uf: 'SC', pib: 1300, covid:	14 },
         ];
+        */
+
+        dataset = [];
+        <% for (item of content){%>
+          dataset.push( {uf: '<%= item.uf %>', pib: '<%= item.pib %>', covid: '<%= item.covid %>'} )
+        <% } %>
+
+        console.log( dataset );
         
         data = dataset;
   
@@ -248,7 +256,7 @@
   
       });
     </script>
-    
+
 
   </body>
 </html>
