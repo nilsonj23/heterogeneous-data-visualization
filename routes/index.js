@@ -5,93 +5,72 @@ var fs = require('fs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Vizualização de Dados Heterogêneos' });
+    res.render('index', { title: 'Vizualização de Dados Heterogêneos' });
 });
 
 /* GET visualizacao page. */
 /*
 router.get('/visualizacao', function(req, res, next) {
-  res.render('visualizacao', { title: 'Tipos de Vizualização' });
+    res.render('visualizacao', { title: 'Tipos de Vizualização' });
 });
 */
 
-router.post('/visualizacao', async (req, res) => {
-  try {
-      if(!req.files) {
-          res.send({
-              status: false,
-              message: 'No file uploaded'
-          });
-      } else {
-          //Use the name of the input field (i.e. "arquivo") to retrieve the uploaded file
-          var tmp = req.files.arquivo;
+//router.post('/visualizacao', async (req, res) => {
+router.post('/visualizacao', function(req, res, next) {
+    try {
+
+        if(!req.files)
+            throw "o upload não foi realizado.";
+
+
+        //Use the name of the input field (i.e. "arquivo") to retrieve the uploaded file
+        var tmp = req.files.arquivo;
+
+        try {
+            var myJSON = JSON.parse(tmp.data);
+        } catch(e) {
+            console.log('arquivo JSON inválido.');
+            throw e;
+        }
+        console.log(myJSON);
           
-          //Use the mv() method to place the file in upload directory (i.e. "uploads")
-          tmp.mv('./uploads/' + tmp.name);
+        dataset = myJSON;
+        dataFields = [];
 
-          try {
-            var rawdata = fs.readFileSync('uploads/exemplo.json');
-            var myJSON = JSON.parse(rawdata);
-            console.log(myJSON);
+        // PREMISSA: considera que o JSON é um array de objetos.
+        // *********
 
-            dataset = myJSON;
-            dataFields = [];
-
-            console.log(1);
-            // PREMISSA: considera que o JSON é um array de objetos.
-            // *********
- 
-            // Obtendo o nome dos campos utilizando o primeiro objeto como referência.
-            obj = dataset[0];
-            console.log(2);
-            // Logging property names and values using Array.forEach
-            Object.getOwnPropertyNames(obj).forEach(function(val, idx, array) {
-              //console.log(val + ' -> ' + obj[val]);
-              dataFields.push(val);
-            });
-            //console.log(dataFields);
-            console.log(3);
-            
+        // Obtendo o nome dos campos utilizando o primeiro objeto como referência.
+        obj = dataset[0];
+        // Logging property names and values using Array.forEach
+        Object.getOwnPropertyNames(obj).forEach(function(val, idx, array) {
+            //console.log(val + ' -> ' + obj[val]);
+            dataFields.push(val);
+        });
+        //console.log(dataFields);
+           
       
-            content = "<p>";
-            for(i=0;i<dataFields.length;i++) {
-              content+= dataFields[i] + " # ";
-            }
-            content+= "</p>";
-      
-            for(i=0;i<dataset.length;i++) {
-              content+= "<p>" + dataset[i][dataFields[0]] + " # " + dataset[i][dataFields[1]] + " # " + dataset[i][dataFields[2]] + " # " + "</p>"; 
-            }
+        content = "<p>";
+        for(i=0;i<dataFields.length;i++) {
+            content+= dataFields[i] + " # ";
+        }
+        content+= "</p>";
+    
+        for(i=0;i<dataset.length;i++) {
+            content+= "<p>" + dataset[i][dataFields[0]] + " # " + dataset[i][dataFields[1]] + " # " + dataset[i][dataFields[2]] + " # " + "</p>"; 
+        }
 
+        //$("#content").html(content);
+        console.log(content);
 
-            //$("#content").html(content);
-            console.log(content);
+        res.render('visualizacao', { title: 'Teste', content: myJSON } );
 
-            res.render('visualizacao', { title: 'Teste', content: myJSON } );
+    } catch (e) {
+        console.log('final');
+        console.log(e);
+        res.status(500).send(e);
+    }
 
-
-          }
-          catch (e) {
-            console.log( 'Não foi possível carregar o JSON. ');
-            console.log(e)
-          }
-
-/*
-          //send response
-          res.send({
-              status: true,
-              message: 'File is uploaded',
-              data: {
-                  name: tmp.name,
-                  mimetype: tmp.mimetype,
-                  size: tmp.size
-              }
-          });
-          */
-      }
-  } catch (err) {
-      res.status(500).send(err);
-  }
 });
 
 module.exports = router;
