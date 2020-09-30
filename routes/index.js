@@ -5,14 +5,17 @@ var fs = require('fs');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Vizualização de Dados Heterogêneos' });
 });
 
-router.get('/visualizar', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+/* GET visualizacao page. */
+/*
+router.get('/visualizacao', function(req, res, next) {
+  res.render('visualizacao', { title: 'Tipos de Vizualização' });
 });
+*/
 
-router.post('/inicio', async (req, res) => {
+router.post('/visualizacao', async (req, res) => {
   try {
       if(!req.files) {
           res.send({
@@ -64,7 +67,7 @@ router.post('/inicio', async (req, res) => {
             //$("#content").html(content);
             console.log(content);
 
-            res.render('parte2', { title: 'Teste', content: myJSON } );
+            res.render('visualizacao', { title: 'Teste', content: myJSON } );
 
 
           }
