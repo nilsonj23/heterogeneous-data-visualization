@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
     <link rel='stylesheet' href='/stylesheets/style.css' />
+
   </head>
 
   <body>
@@ -94,13 +95,24 @@
       <li class="list-group-item">
         <div class="form-row">
           <div class="form-group col-sm-12">
+            <form action="/inicio" method="post" enctype="multipart/form-data">
               <label for="inputEnd">Buscar Arquivo Json:</label>
-              <input type="file" class="form-control-file border">
+              <input type="file" class="form-control-file border" name="arquivo">
               <button class="btn btn-success mt-2 text-center btn-sm" type="submit">Enviar</button>
+            </form>
           </div>
       </div>
       </li>
     </ul>
+  </div>
+
+	<div>
+		<div id="content">
+			show content here
+		</div>
+		
+		<div id="chart">
+		</div>
   </div>
 
   </body>
