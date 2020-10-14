@@ -8,6 +8,11 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Vizualização de Dados Heterogêneos' });
 });
 
+/* GET Selecionando Views page. */
+router.get('/select', function(req, res, next) {
+    res.render('select', { title: 'Selecionando Possiveis Views' });
+});
+
 /* GET visualizacao page. */
 /*
 router.get('/visualizacao', function(req, res, next) {
