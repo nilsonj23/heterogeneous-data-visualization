@@ -53,11 +53,11 @@
         <li class="nav-item">
           <a class="nav-link" href="/">Início</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
             <a class="nav-link" href="#">Análise</a>
           </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Visualização</a>
+        <li class="nav-item">
+          <a class="nav-link" href="/visualizacao">Visualização</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Sobre</a>
@@ -84,8 +84,22 @@
       <button class="btn btn-success mt-2 text-center btn-sm" type="button" id="btSankey1">Sankey 1</button>
 
       <div>
+        <div id="content" class="col-sm-6">
+  
+                <table class="table" id="tabelaDados">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+  
+        </div>
 
-        <div id="chart" class="col-sm-12" style="background-color: #ccc;">
+        <div id="resumo" class="col-sm-6">
+        </div>
+  
+        <div id="chart" class="col-sm-6">
+        </div>
+
+        <div id="chart2" class="col-sm-12" style="background-color: #ccc;">
         </div>
   
       </div>
@@ -133,6 +147,9 @@
 
     <script type="text/javascript">
   
+        var myData;
+        var myDataFields;
+
         var dataset;
 
         var chartBuilded = 0;
@@ -142,20 +159,6 @@
         var xAxis;
         var y;
         var yAxis;
-
-        alunos = [
-        {"id":1, "nome":"Antonio", "disciplina":"Engenharia de Software", "nivel":"Graduação", "regiao":"Zona Sul"},
-        {"id":2, "nome":"Bento", "disciplina":"Lógica de Computação", "nivel":"Graduação", "regiao":"Zona Sul"},
-        {"id":3, "nome":"Bento", "disciplina":"Algoritmos em Grafos", "nivel":"Graduação", "regiao":"Zona Sul"},
-        {"id":4, "nome":"Carlos", "disciplina":"Banco de Dados", "nivel":"Mestrado", "regiao":"Zona Norte"},
-        {"id":5, "nome":"Daniel", "disciplina":"Banco de Dados", "nivel":"Mestrado", "regiao":"Baixada Fluminense"},
-        {"id":6, "nome":"Erico", "disciplina":"Engenharia de Software", "nivel":"Graduação", "regiao":"Baixada Fluminense"},
-        {"id":7, "nome":"Fernanda", "disciplina":"Sistemas Operacionais I", "nivel":"Doutorado", "regiao":"Zona Oeste"},
-        {"id":8, "nome":"Glaucio", "disciplina":"Lógica de Computação", "nivel":"Graduação", "regiao":"Zona Oeste"},
-        {"id":9, "nome":"Carlos", "disciplina":"Visão Computacional", "nivel":"Mestrado", "regiao":"Zona Norte"},
-        {"id":10, "nome":"Carlos", "disciplina":"Álgebra Linear", "nivel":"Mestrado", "regiao":"Zona Norte"}
-        ];
-        console.log(alunos);
 
         function mostrarSankey1() {
             console.log('mostrarSankey1');
@@ -203,13 +206,13 @@
             // set the dimensions and margins of the graph
             var margin = {top: 10, right: 20, bottom: 10, left: 10};
             // Usando a largura do componente DIV.
-            var widthTexto = $('#chart').css('width');
+            var widthTexto = $('#chart2').css('width');
             var width = widthTexto.substr(0,widthTexto.length-2);
             width = width - margin.left - margin.right;
             var height = 480 - margin.top - margin.bottom;
 
             // append the svg object to the body of the page
-            var svg = d3.select("#chart").append("svg")
+            var svg = d3.select("#chart2").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
@@ -304,9 +307,9 @@
             // O objeto JSON passado como parâmetro para o render, 
             // pode ser armazenado em uma variável JS no lado cliente
             // através da seguinte instrução:
-            newObj = JSON.parse('<%- JSON.stringify(content) %>');
+            newObj = JSON.parse('<%- JSON.stringify(data) %>');
             console.log(newObj);
-            // O parametro "content" é o nome da chave usado no render
+            // O parametro "data" é o nome da chave usado no render
         }
   
         function iniciarGrafico() {
@@ -370,7 +373,7 @@
             */
 
             dataset = [];
-            <% for (item of content){%>
+            <% for (item of data){%>
             dataset.push( {uf: '<%= item.uf %>', pib: '<%= item.pib %>', covid: '<%= item.covid %>'} )
             <% } %>
 
@@ -415,6 +418,84 @@
             .text(tmp);
   
         }
+
+        function updateHtml() {
+
+            // O objeto JSON passado como parâmetro para o render, 
+            // pode ser armazenado em uma variável JS no lado cliente
+            // através da seguinte instrução:
+            myData = JSON.parse('<%- JSON.stringify(data) %>');
+            myDataFields = JSON.parse('<%- JSON.stringify(dataFields) %>');
+
+            preencherTabela();
+
+        }
+
+        function preencherTabela() {
+
+            console.log(myData);
+            myheader='';
+            for(var i=0;i<myDataFields.length;i++)
+                myheader+='<th>' + myDataFields[i] + '</th>';
+
+            if (myheader!='')
+                myheader = '<tr>' + myheader + '</tr>';
+            $("#tabelaDados thead").html(myheader);
+
+            
+            // ordem pib, covid
+            pib = [];
+            covid = [];
+            statisticsByField = [ { min:0, avg:0, max:0}, {min:0, avg:0, max:0} ];
+
+            mybody='';
+            for(var i=0;i<myData.length;i++) {
+                mybody +='<tr>';
+
+                for(var j=0;j<myDataFields.length;j++) {
+                    tmpContent = eval( 'myData[i].' + myDataFields[j] );
+                    mybody +='<td>' + tmpContent + '</td>';
+
+                    indice = -1;
+                    if (myDataFields[j]=='pib')
+                        pib.push(tmpContent);
+                    else if (myDataFields[j]=='covid')
+                        covid.push(tmpContent);
+
+                }
+
+                mybody +='</tr>';
+            }
+            $("#tabelaDados tbody").html(mybody);
+
+            gerarEstatisticas(pib, covid);
+
+        }
+
+        function gerarEstatisticas(pib, covid) {
+            
+            min = 99999999999999;
+            max = 0;
+            avg = 0;
+            for (var i=0;i<pib.length;i++) {
+                if (pib[i] < min) min = pib[i];
+                if (pib[i] > max) max = pib[i];
+                avg = ( (avg * i) + pib[i] ) / (i+1);
+            }
+            pibHtml = 'PIB -> [min:' + min + ']  [avg:' + Math.round(avg) + ']  [max:' + max + ']';
+
+            min = 99999999999999;
+            max = 0;
+            avg = 0;
+            for (var i=0;i<covid.length;i++) {
+                if (covid[i] < min) min = covid[i];
+                if (covid[i] > max) max = covid[i];
+                avg = ( (avg * i) + covid[i] ) / (i+1);
+            }
+            pibCovid = 'COVID -> [min:' + min + ']  [avg:' + Math.round(avg) + ']  [max:' + max + ']';
+            $( "#resumo" ).html( pibHtml + '<br/>' + pibCovid );
+
+        }
   
         $( document ).ready(function() {
       
@@ -427,6 +508,8 @@
             $( "#btSankey1" ).click(function( e ) {
                 mostrarSankey1();
             });
+
+            updateHtml();
   
         });
     </script>

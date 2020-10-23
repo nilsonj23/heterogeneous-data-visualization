@@ -1,0 +1,73 @@
+[
+    {
+        "ID": "4154796",
+        "Nome": "Vingadores- Ultimato",
+        "Data": "4/25/2019",
+        "Categoria 1": "Walt Disney",
+        "Categoria 2": "A\u00e7\u00e3o",
+        "Associa\u00e7\u00e3o": "Anthony Russo",
+        "Localidade": "USA",
+        "Valor": "$ 2 790 000 000,00"
+    },
+    {
+        "ID": "0816692",
+        "Nome": "Interestelar",
+        "Data": "12/6/2014",
+        "Categoria 1": "Paramount Pictures",
+        "Categoria 2": "Sci-fi",
+        "Associa\u00e7\u00e3o": "Chistopher Nolan",
+        "Localidade": "USA",
+        "Valor": "$ 675 120 017,00"
+    },
+    {
+        "ID": "6105098",
+        "Nome": "O Rei Le\u00e3o",
+        "Data": "6/9/2019",
+        "Categoria 1": "Walt Disney",
+        "Categoria 2": "Anima\u00e7\u00e3o",
+        "Associa\u00e7\u00e3o": "Jon Favreau",
+        "Localidade": "USA",
+        "Valor": "$ 968 511 805,00"
+    },
+    {
+        "ID": "0861739",
+        "Nome": "Tropa de Elite",
+        "Data": "10/5/2007",
+        "Categoria 1": "Universal Pictures",
+        "Categoria 2": "A\u00e7\u00e3o",
+        "Associa\u00e7\u00e3o": "J\u00f3se Padilha",
+        "Localidade": "Brazil",
+        "Valor": "$ 6 163 905,00"
+    },
+    {
+        "ID": "0468569",
+        "Nome": "Batman - O Cavaleiro das Trevas",
+        "Data": "7/18/2008",
+        "Categoria 1": "Warner Bros",
+        "Categoria 2": "A\u00e7\u00e3o",
+        "Associa\u00e7\u00e3o": "Chistopher Nolan",
+        "Localidade": "USA",
+        "Valor": "$ 1 004 934 033,00"
+    },
+    {
+        "ID": "1392190",
+        "Nome": "Mad Max: Estrada da F\u00faria",
+        "Data": "5/14/2015",
+        "Categoria 1": "Warner Bros",
+        "Categoria 2": "A\u00e7\u00e3o",
+        "Associa\u00e7\u00e3o": "Geoger Miller",
+        "Localidade": "Australia",
+        "Valor": "$ 378 858 340,00"
+    },
+    {
+        "ID": "0062622",
+        "Nome": "2001 - Uma Odisseia no Espa\u00e7o",
+        "Data": "4/29/1968",
+        "Categoria 1": "MGM",
+        "Categoria 2": "Sci-fi",
+        "Associa\u00e7\u00e3o": "stanley kubrick",
+        "Localidade": "USA",
+        "Valor": "$ 190 000 000,00"
+    }
+
+]

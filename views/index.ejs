@@ -30,7 +30,10 @@
           <a class="nav-link" href="#">Início</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/visualizacao">visualização</a>
+            <a class="nav-link" href="/analise">Análise</a>
+          </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/visualizacao">Visualização</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Sobre</a>
@@ -97,9 +100,13 @@
       <li class="list-group-item">
         <div class="form-row">
           <div class="form-group col-sm-12">
-            <form action="/visualizacao" method="post" enctype="multipart/form-data">
-              <label for="inputEnd">Buscar Arquivo Json:</label>
-              <input type="file" class="form-control-file border" name="arquivo">
+            <form action="/analise" method="post" enctype="multipart/form-data">
+              <!--
+              <label for="inputEnd">Arquivo GoogleDocs convertido Json:</label>
+              <input type="file" class="form-control-file border" name="arquivo1">
+              -->
+              <label for="arquivoMapeamento">Arquivo Mapeamento Json:</label>
+              <input type="file" class="form-control-file border" name="arquivoMapeamento">
               <button class="btn btn-success mt-2 text-center btn-sm" type="submit">Enviar</button>
             </form>
 
