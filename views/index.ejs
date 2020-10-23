@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+  <title><%= title %></title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
-  </head>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
 
-  <body>
-    <!-----------------------------------------------------  Cabeçalho  ------------------------------------------------->
-    
-    <nav class="navbar navbar-expand-lg navbar-dark" id="cab"> <!-- bg-dark-->
-      <div class="container">
-                                
-        <!-- navbar-brnad : É o nome de destaque que fica na lateral esquerda do navbar -->
-        <a class="navbar-brand h1 mb-0" href="#">VizHD</a>
+</head>
 
-        <!-- Botão de expandir e recolher do navbar -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<body>
+  <!-----------------------------------------------------  Cabeçalho  ------------------------------------------------->
+
+  <nav class="navbar navbar-expand-lg navbar-dark" id="cab">
+    <!-- bg-dark-->
+    <div class="container">
+
+      <!-- navbar-brnad : É o nome de destaque que fica na lateral esquerda do navbar -->
+      <a class="navbar-brand h1 mb-0" href="#">VizHD</a>
+
+      <!-- Botão de expandir e recolher do navbar -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <ul class="navbar-nav ">
         <li class="nav-item active">
           <a class="nav-link" href="#">Início</a>
@@ -39,60 +42,73 @@
           <a class="nav-link" href="#">Sobre</a>
         </li>
       </ul>
-      </div>
-    </nav>
+    </div>
+  </nav>
 
-    <!-----------------------------------------------------  Scrollspy  ------------------------------------------------->
-      
-    <div class="container">
-    
-      <div class="row">
-      
-          <!-- my-5 : margem em todo eixo y, tanto margem top como margem bottom -->
-          <div class="col-12 text-center my-5">
-              <h2 class="display-3">   Vizualização de Dados Heterogêneos</h2>
-              <p>Este trabalho tem como objetivo propor um método que permita o recebimento de dados heterogêneos de diferentes domínios, analisar esses dados e propor diferentes tipos de visualização de acordo com os dados de entrada. Para atingir este objetivo, os dados de entrada serão analisados por um mecanismo que permitirá os tipos de visualização possíveis para aquele grupo de dados, então, permitirá a escolha entre as visualizações de dados que são identificadas pelo mecanismo.</p>
-          </div>
-      </div>
-      
-      <div class="jumbotron row mb-5">
-          
-          <!-- Menu Lateral -->
-          <div class="col-sm-6 col-md-4 mb-3">
-              <nav id="navbarVertical" class="navbar navbar-light bg-light">
-                  
-                  <nav class="nav nav-pills flex-column">
-                      
-                      <a class="nav-link" href="#item1">Regras de recebimento do arquivo Json</a>
-                      <nav class="nav nav-pills flex-column">
-                          <a class="nav-link ml-3" href="#item1-1">Item 1-1</a>
-                          <a class="nav-link ml-3" href="#item1-2">Item 1-2</a>
-                      </nav>
-                      
-                      <a class="nav-link my-2" href="#item2">Item 2</a>
-                      </nav>
-                  </nav>
-              </nav>
-          </div>
-      
-          <div class="col-sm-6 col-md-8">
-          
-              <div data-spy="scroll" data-target="#navbarVertical" data-offset="0" class="scrollspySite">
-                  
-                  <h4 id="item1">Regras de recebimento do arquivo Json</h4>
-                  <p>Maecenas vitae posuere turpis. Sed ut lacus egestas, vulputate erat quis, vehicula massa. Suspendisse in porttitor turpis. Nulla sit amet nulla iaculis, tristique diam semper, feugiat nisi. Nam at porta odio. Sed eu ultrices tortor, interdum aliquam nibh. Morbi scelerisque, ligula eget luctus pellentesque, elit lectus tincidunt sapien.</p>
-                  
-                  <h5 id="item1-1">Item 1-1</h5>
-                  <p>Maecenas vitae posuere turpis. Sed ut lacus egestas, vulputate erat quis, vehicula massa. Suspendisse in porttitor turpis. Nulla sit amet nulla iaculis, tristique diam semper, feugiat nisi. Nam at porta odio. Sed eu ultrices tortor, interdum aliquam nibh. Morbi scelerisque, ligula eget luctus pellentesque, elit lectus tincidunt sapien.</p>
+  <!-----------------------------------------------------  Scrollspy  ------------------------------------------------->
 
-                  <h5 id="item1-2">Item 1-2</h5>
-                  <p>Maecenas vitae posuere turpis. Sed ut lacus egestas, vulputate erat quis, vehicula massa. Suspendisse in porttitor turpis. Nulla sit amet nulla iaculis, tristique diam semper, feugiat nisi. Nam at porta odio. Sed eu ultrices tortor, interdum aliquam nibh. Morbi scelerisque, ligula eget luctus pellentesque, elit lectus tincidunt sapien.</p>
+  <div class="container">
 
-              </div>
-          </div>
+    <div class="row">
+
+      <!-- my-5 : margem em todo eixo y, tanto margem top como margem bottom -->
+      <div class="col-12 text-center my-5">
+        <h2 class="display-3"> Vizualização de Dados Heterogêneos</h2>
+        <p>Este trabalho tem como objetivo propor um método que permita o recebimento de dados heterogêneos de
+          diferentes domínios, analisar esses dados e propor diferentes tipos de visualização de acordo com os dados de
+          entrada. Para atingir este objetivo, os dados de entrada serão analisados por um mecanismo que permitirá os
+          tipos de visualização possíveis para aquele grupo de dados, então, permitirá a escolha entre as visualizações
+          de dados que são identificadas pelo mecanismo.</p>
       </div>
-  </div> 
-  
+    </div>
+
+    <div class="jumbotron row mb-5">
+
+      <!-- Menu Lateral -->
+      <div class="col-sm-6 col-md-4 mb-3">
+        <nav id="navbarVertical" class="navbar navbar-light bg-light">
+
+          <nav class="nav nav-pills flex-column">
+
+            <a class="nav-link" href="#item1">Regras de recebimento do arquivo Json</a>
+            <nav class="nav nav-pills flex-column">
+              <a class="nav-link ml-3" href="#item1-1">Item 1-1</a>
+              <a class="nav-link ml-3" href="#item1-2">Item 1-2</a>
+            </nav>
+
+            <a class="nav-link my-2" href="#item2">Item 2</a>
+          </nav>
+        </nav>
+        </nav>
+      </div>
+
+      <div class="col-sm-6 col-md-8">
+
+        <div data-spy="scroll" data-target="#navbarVertical" data-offset="0" class="scrollspySite">
+
+          <h4 id="item1">Regras de recebimento do arquivo Json</h4>
+          <p>Maecenas vitae posuere turpis. Sed ut lacus egestas, vulputate erat quis, vehicula massa. Suspendisse in
+            porttitor turpis. Nulla sit amet nulla iaculis, tristique diam semper, feugiat nisi. Nam at porta odio. Sed
+            eu ultrices tortor, interdum aliquam nibh. Morbi scelerisque, ligula eget luctus pellentesque, elit lectus
+            tincidunt sapien.</p>
+
+          <h5 id="item1-1">Item 1-1</h5>
+          <p>Maecenas vitae posuere turpis. Sed ut lacus egestas, vulputate erat quis, vehicula massa. Suspendisse in
+            porttitor turpis. Nulla sit amet nulla iaculis, tristique diam semper, feugiat nisi. Nam at porta odio. Sed
+            eu ultrices tortor, interdum aliquam nibh. Morbi scelerisque, ligula eget luctus pellentesque, elit lectus
+            tincidunt sapien.</p>
+
+          <h5 id="item1-2">Item 1-2</h5>
+          <p>Maecenas vitae posuere turpis. Sed ut lacus egestas, vulputate erat quis, vehicula massa. Suspendisse in
+            porttitor turpis. Nulla sit amet nulla iaculis, tristique diam semper, feugiat nisi. Nam at porta odio. Sed
+            eu ultrices tortor, interdum aliquam nibh. Morbi scelerisque, ligula eget luctus pellentesque, elit lectus
+            tincidunt sapien.</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <div class="container">
     <ul class="list-group">
@@ -105,49 +121,55 @@
               <input type="file" class="form-control-file border" name="arquivo">
               <button class="btn btn-success mt-2 text-center btn-sm" type="submit">Enviar</button>
             </form>
+            <div id="res"></div>
+              <form id="formulario"> </br>
+                <p>Token: <input type="text" id="valor">
+                <input type="submit" onclick="capturar()"  value="Enviar"></p>
+              </form>
 
           </div>
-      </div>
+        </div>
       </li>
     </ul>
   </div>
 
-    <!----------------------------------------------- Footer -------------------------------------------->
-    <div class="container-fluid mt-5">
-      <div class="row footer-top">
-        <div class="col-sm-4 text-center">
-          <h4 class="ft-text-title mb-4">Projeto VizHD</h4>
-          <h6 class="ft-desp">UERJ- Universidade do Rio de Janeiro 
-            <br>IME- Instituto de Matematica e Estatistica
-            <br>Ciência da Computação
-            <p class="mt-3"><b>Orientado por Marcelo Schots</b></p>
-          </h6>
-        </div>
-          <div class="col-sm-4 text-center border-left">
-            <h4 class="ft-text-title">Colaboradores:</h4>
-            <div class="address-member">
-              <p class="member mb-2">Aislan Célio Ferreira</p>
-              <p class="member mb-2">Claudio Henrique Medaber Jambo</p>
-              <p class="member mb-2">Gedir Fabiano de Moraes Gonçalves</p>
-              <p class="member mb-2">Nilson Junio Souza da Silva</p>
-              <p class="member mb-2">Paulo Victor Pimentel Coelho</p>
-            </div>
-          </div>
-          <div class="col-sm-4 col-xs-12 text-center border-left">
-            <h4 class="ft-text-title">Sobre</h4>
-            <div class="pspt-dtls">
-              <a href="#" class="about">Artigo</a>
-              <a href="https://github.com/nilsonj23/heterogeneous-data-visualization" class="team">Git</a>
-            </div>
-          </div>
+  <!----------------------------------------------- Footer -------------------------------------------->
+  <div class="container-fluid mt-5">
+    <div class="row footer-top">
+      <div class="col-sm-4 text-center">
+        <h4 class="ft-text-title mb-4">Projeto VizHD</h4>
+        <h6 class="ft-desp">UERJ- Universidade do Rio de Janeiro
+          <br>IME- Instituto de Matematica e Estatistica
+          <br>Ciência da Computação
+          <p class="mt-3"><b>Orientado por Marcelo Schots</b></p>
+        </h6>
       </div>
-      <div class="row ft-copyright pt-2 pb-2" style="padding-left: 25px;">
-				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
-					<p class="mb-0 mt-0">© Copyright 2020 | All Rights Reserved.</p>
-				</div>
-				<hr>
-			</div>	
+      <div class="col-sm-4 text-center border-left">
+        <h4 class="ft-text-title">Colaboradores:</h4>
+        <div class="address-member">
+          <p class="member mb-2">Aislan Célio Ferreira</p>
+          <p class="member mb-2">Claudio Henrique Medaber Jambo</p>
+          <p class="member mb-2">Gedir Fabiano de Moraes Gonçalves</p>
+          <p class="member mb-2">Nilson Junio Souza da Silva</p>
+          <p class="member mb-2">Paulo Victor Pimentel Coelho</p>
+        </div>
+      </div>
+      <div class="col-sm-4 col-xs-12 text-center border-left">
+        <h4 class="ft-text-title">Sobre</h4>
+        <div class="pspt-dtls">
+          <a href="#" class="about">Artigo</a>
+          <a href="https://github.com/nilsonj23/heterogeneous-data-visualization" class="team">Git</a>
+        </div>
+      </div>
     </div>
+    <div class="row ft-copyright pt-2 pb-2" style="padding-left: 25px;">
+      <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
+        <p class="mb-0 mt-0">© Copyright 2020 | All Rights Reserved.</p>
+      </div>
+      <hr>
+    </div>
+  </div>
 
-  </body>
+</body>
+
 </html>
