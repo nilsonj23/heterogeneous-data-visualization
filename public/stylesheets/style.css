@@ -153,3 +153,12 @@ body {
 	.developer b {
 		color: red;
 	}
+
+    li {
+        margin-bottom: 1em;
+    }
+
+    .abstract {
+        line-height: 1.5em;
+        text-align: justify;
+    }
