@@ -32,6 +32,12 @@
         .link:hover {
             stroke-opacity: .5;
         }
+        .barra_vermelha {
+	        fill: #FF0000;
+        }
+        .barra_azul {
+	        fill: #0000FF;
+        }
     </style>
 
 </head>
@@ -53,11 +59,11 @@
         <li class="nav-item">
           <a class="nav-link" href="/">Início</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
             <a class="nav-link" href="#">Análise</a>
           </li>
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Visualização</a>
+        <li class="nav-item">
+          <a class="nav-link" href="/visualizacao">Visualização</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Sobre</a>
@@ -79,13 +85,26 @@
           </div>
       </div>
 
-      <button class="btn btn-success mt-2 text-center btn-sm" type="button" id="btGraficoPIB">Gráfico PIB</button>
-      <button class="btn btn-success mt-2 text-center btn-sm" type="button" id="btVarRecebidaJS">VarRecebidaJS</button>
+      <button class="btn btn-success mt-2 text-center btn-sm" type="button" id="btGraficoPIB">Gráfico</button>
       <button class="btn btn-success mt-2 text-center btn-sm" type="button" id="btSankey1">Sankey 1</button>
 
       <div>
+        <div id="content" class="col-sm-12">
+  
+                <table class="table" id="tabelaDados">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+  
+        </div>
 
-        <div id="chart" class="col-sm-12" style="background-color: #ccc;">
+        <div id="resumo" class="col-sm-6">
+        </div>
+  
+        <div id="chart" class="col-sm-12">
+        </div>
+
+        <div id="chart2" class="col-sm-12" style="background-color: #ccc;">
         </div>
   
       </div>
@@ -100,7 +119,7 @@
           <h6 class="ft-desp">UERJ- Universidade do Rio de Janeiro 
             <br>IME- Instituto de Matematica e Estatistica
             <br>Ciência da Computação
-            <p class="mt-3"><b>Orientado por Marcelo Schots</b></p>
+            <p class="mt-3"><b>Coordenado por Marcelo Schots</b></p>
           </h6>
         </div>
           <div class="col-sm-4 text-center border-left">
@@ -133,6 +152,12 @@
 
     <script type="text/javascript">
   
+        var myJsonDoc;
+        var myJsonMap;
+
+        var myData;
+        var myDataFields;
+
         var dataset;
 
         var chartBuilded = 0;
@@ -143,19 +168,10 @@
         var y;
         var yAxis;
 
-        alunos = [
-        {"id":1, "nome":"Antonio", "disciplina":"Engenharia de Software", "nivel":"Graduação", "regiao":"Zona Sul"},
-        {"id":2, "nome":"Bento", "disciplina":"Lógica de Computação", "nivel":"Graduação", "regiao":"Zona Sul"},
-        {"id":3, "nome":"Bento", "disciplina":"Algoritmos em Grafos", "nivel":"Graduação", "regiao":"Zona Sul"},
-        {"id":4, "nome":"Carlos", "disciplina":"Banco de Dados", "nivel":"Mestrado", "regiao":"Zona Norte"},
-        {"id":5, "nome":"Daniel", "disciplina":"Banco de Dados", "nivel":"Mestrado", "regiao":"Baixada Fluminense"},
-        {"id":6, "nome":"Erico", "disciplina":"Engenharia de Software", "nivel":"Graduação", "regiao":"Baixada Fluminense"},
-        {"id":7, "nome":"Fernanda", "disciplina":"Sistemas Operacionais I", "nivel":"Doutorado", "regiao":"Zona Oeste"},
-        {"id":8, "nome":"Glaucio", "disciplina":"Lógica de Computação", "nivel":"Graduação", "regiao":"Zona Oeste"},
-        {"id":9, "nome":"Carlos", "disciplina":"Visão Computacional", "nivel":"Mestrado", "regiao":"Zona Norte"},
-        {"id":10, "nome":"Carlos", "disciplina":"Álgebra Linear", "nivel":"Mestrado", "regiao":"Zona Norte"}
-        ];
-        console.log(alunos);
+        
+        
+        
+        var xAxisTitle;
 
         function mostrarSankey1() {
             console.log('mostrarSankey1');
@@ -203,13 +219,13 @@
             // set the dimensions and margins of the graph
             var margin = {top: 10, right: 20, bottom: 10, left: 10};
             // Usando a largura do componente DIV.
-            var widthTexto = $('#chart').css('width');
+            var widthTexto = $('#chart2').css('width');
             var width = widthTexto.substr(0,widthTexto.length-2);
             width = width - margin.left - margin.right;
             var height = 480 - margin.top - margin.bottom;
 
             // append the svg object to the body of the page
-            var svg = d3.select("#chart").append("svg")
+            var svg = d3.select("#chart2").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
@@ -300,56 +316,104 @@
 
         }
 
-        function varRecebidaJS() {
-            // O objeto JSON passado como parâmetro para o render, 
-            // pode ser armazenado em uma variável JS no lado cliente
-            // através da seguinte instrução:
-            newObj = JSON.parse('<%- JSON.stringify(content) %>');
-            console.log(newObj);
-            // O parametro "content" é o nome da chave usado no render
-        }
-  
+ 
         function iniciarGrafico() {
   
             chartBuilded = 1;
     
             // set the dimensions and margins of the graph
-            margin = {top: 30, right: 30, bottom: 70, left: 60},
-            width = 460 - margin.left - margin.right,
+            margin = {top: 30, right: 30, bottom: 70, left: 100},
+            width = 800 - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
-    
+    /*
+            // Usando a largura do componente DIV.
+            var widthTexto = $('#chart').css('width'); // 800 px
+            var width = widthTexto.substr(0,widthTexto.length-2);
+            width = width - margin.left - margin.right;
+            var height = 480 - margin.top - margin.bottom;
+*/
+
+
+
             // append the svg object
-            svg = d3.select("#chart")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
+            svg = d3.select('#chart')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform',
+                'translate(' + margin.left + ',' + margin.top + ')');
     
             // Initialize the X axis
             x = d3.scaleBand()
             .range([ 0, width ])
             .padding(0.2);
     
-            xAxis = svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
+            xAxis = svg.append('g')
+            .attr('transform', 'translate(0,' + height + ')');
+
     
             // Initialize the Y axis
             y = d3.scaleLinear()
             .range([ height, 0]);
     
-            yAxis = svg.append("g")
-            .attr("class", "myYaxis")
-    
-            titulo = svg.append("text")
-            .attr("id", "header")
-            .attr("x", 0 )
-            .attr("y", -10 )
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .attr("fill","#808080");
-  
+            yAxis = svg.append('g')
+            .attr('class', 'myYaxis')
+
+
+            /* Elemento para o título do gráfico
+            */
+            graphHeader = svg.append('g').attr('id', 'graphHeader');
+            graphHeader.append('rect')
+            .attr('id', 'graphHeaderBackground')
+            .attr('y', 0);
+            graphHeader.append('text')
+            .attr('id', 'graphHeaderTitle')
+            .attr('y', 0)
+            .attr('font-weight', 'bold')
+            .text('<titulo do grafico>');
+
+            /* Elemento para o título do eixo X
+            */
+            xAxisHeader = svg.append('g').attr('id', 'xAxisHeader');
+            xAxisHeader.append('rect')
+            .attr('id', 'xAxisHeaderBackground')
+            .attr('y', 300);
+            xAxisHeader.append('text')
+            .attr('id', 'xAxisHeaderTitle')
+            .attr('y', 300)
+            .attr('font-size', 11)
+            .text('<titulo do eixo X>');
+
+            /* Elemento para o título do eixo Y
+            */
+            yAxisHeader = svg.append('g').attr('id', 'yAxisHeader');
+            yAxisHeader.append('rect')
+            .attr('id', 'yAxisHeaderBackground')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', 0 - margin.left)
+            .attr('x',0 - (height / 2))
+            .attr('dy', '1em');
+            yAxisHeader.append('text')
+            .attr('id', 'yAxisHeaderTitle')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', 0 - margin.left)
+            .attr('x',0 - (height / 2))
+            .attr('dy', '1em')
+            .attr('font-size', 11)
+            .style('text-anchor', 'middle')
+            .text('<titulo do eixo Y>');
+
+
+        }
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i=0;i<6;i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
   
         // A function that create / update the plot for a given variable:
@@ -369,64 +433,189 @@
             ];
             */
 
-            dataset = [];
-            <% for (item of content){%>
-            dataset.push( {uf: '<%= item.uf %>', pib: '<%= item.pib %>', covid: '<%= item.covid %>'} )
-            <% } %>
-
             //console.log( dataset );
-            
             data = dataset;
     
             // X axis
-            x.domain(data.map(function(d) { return d.uf; }))
-            xAxis.transition().duration(1000).call(d3.axisBottom(x))
+            //x.domain(data.map(function(d) { return d.uf; }))
+            x.domain(data.map(function(d) { return d[ myJsonMap.components.x.field ]; }))
+
+            xAxis.transition().duration(1000);
+            xAxis.call(d3.axisBottom(x));
+
     
             // Add Y axis
-            y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
-            yAxis.transition().duration(1000).call(d3.axisLeft(y));
-    
+            //y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
+            y.domain([0, d3.max(data, function(d) { return +d[ myJsonMap.components.y.field ] }) ]);
+
+            yAxis.transition().duration(1000);
+            yAxis.call(d3.axisLeft(y));
+
+            // Cores para as barras
+            var barType = 'SINGLE_COLOR';
+            var barColor = 'black';
+            if (myJsonMap.components.bar.type !== undefined)
+                barType = myJsonMap.components.bar.type;
+
+            if (myJsonMap.components.bar.barColor !== undefined)
+                barColor = myJsonMap.components.bar.barColor;
+
+
             // variable u: map data to existing bars
-            var u = svg.selectAll("rect").data(data);
-    
+            var u = svg.selectAll('.bar').data(data);
+
             // update bars
             u.enter()
-            .append("rect")
+            .append('rect')
             .merge(u)
             .transition()
             .duration(1000)
-            .attr("x", function(d) { return x(d.uf); })
-            .attr("y", function(d) { return y(d[selectedVar]); })
-            .attr("width", x.bandwidth())
-            .attr("height", function(d) { return height - y(d[selectedVar]); })
-            .attr("class", function(d) { 
-                if (d.uf == "RJ")
-                return "barra_azul"; 
-                else
-                return "barra_vermelha"; 
-            })
-  
-            if (selectedVar == 'pib')
-            tmp = "Produto Interno Bruto por Unidade da Federação";
+            .attr('class', 'bar')
+            .attr('x', function(d) { return x( d[ myJsonMap.components.x.field ] ); })
+            .attr('y', function(d) { return y( d[ myJsonMap.components.y.field ] ); })
+            .attr('width', x.bandwidth())
+            .attr('height', function(d) { return height - y( d[ myJsonMap.components.y.field ] ); })
+            .attr('fill', function(d) { 
+                if (barType == 'SINGLE_COLOR')
+                    return barColor;
+                else {
+                    return getRandomColor();
+                }
+            });
+
+
+            // Mostrando os valores individuais como tooltip.
+            u = svg.selectAll('rect').selectAll('.bar').data(data)
+            .enter()
+            .append('title')
+            .text( function(d) { return d[ myJsonMap.components.y.field ] ; });
+
+
+// Ajustando o título do gráfico.
+            graphTitle = myJsonMap.components.others.title;
+            svg.select('#graphHeaderTitle')
+                .text(graphTitle)
+                .attr('x', parseInt((width -margin.left-margin.right- graphTitle.length) / 2) )
+                .attr('y', 0 - margin.top/2 )
+                .attr('stroke', 'none')
+                .attr('fill', '#000000');
+
+            bbox = svg.select('#graphHeaderTitle').node().getBBox();
+            padding = 2;
+            svg.select('#graphHeaderBackground')
+                .attr('x', bbox.x - padding)
+                .attr('y', bbox.y - padding)
+                .attr('width', bbox.width + (2*padding))
+                .attr('height', bbox.height + (2*padding))
+                .attr('stroke', 'none')
+                .attr('fill', 'none');
+// Fim do ajuste do título do gráfico
+
+ 
+
+// Ajustando o título do eixo X.
+            // se não foi informado, será o nome da prória variável (campo).
+            if (myJsonMap.components.x.title !== undefined)
+                tituloString = myJsonMap.components.x.title;
             else
-            tmp = "Número de mortes COVID por Unidade da Federação";
-    
-            svg.select("#header")
-            .text(tmp);
+                tituloString = myJsonMap.components.x.field;
+
+            svg.select('#xAxisHeaderTitle')
+                .text(tituloString)
+                .attr('x', parseInt((width -margin.left-margin.right- tituloString.length) / 2) )
+                .attr('y', height + margin.bottom - 10 )
+                .attr('stroke', 'none')
+                .attr('fill', 'black');
+
+            bbox = svg.select('#xAxisHeaderTitle').node().getBBox();
+            padding = 2;
+            svg.select('#xAxisHeaderBackground')
+                .attr('x', bbox.x - padding)
+                .attr('y', bbox.y - padding)
+                .attr('width', bbox.width + (2*padding))
+                .attr('height', bbox.height + (2*padding))
+                .attr('stroke', 'none')
+                .attr('fill', 'orange');
+// Fim do ajuste do título do gráfico
+
+
+// Ajustando o título do eixo Y.
+            // se não foi informado, será o nome da prória variável (campo).
+            if (myJsonMap.components.y.title !== undefined)
+                tituloString = myJsonMap.components.y.title;
+            else
+                tituloString = myJsonMap.components.y.field;
+
+            svg.select('#yAxisHeaderTitle')
+                .text(tituloString)
+                .attr('stroke', 'none')
+                .attr('fill', 'black');
+
+            bbox = svg.select('#yAxisHeaderTitle').node().getBBox();
+            padding = 2;
+            svg.select('#yAxisHeaderBackground')
+                .attr('x', bbox.x - padding)
+                .attr('y', bbox.y - padding)
+                .attr('width', bbox.width + (2*padding))
+                .attr('height', bbox.height + (2*padding))
+                .attr('stroke', 'none')
+                .attr('fill', 'lightblue');
+// Fim do ajuste do título do gráfico
+
+
   
+        }
+
+
+
+
+
+        function updateHtmlTable(tableName, data, fields) {
+            myheader='';
+            for(var i=0;i<fields.length;i++)
+                myheader+='<th>' + fields[i] + '</th>';
+
+            if (myheader!='')
+                myheader = '<tr>' + myheader + '</tr>';
+            $('#' + tableName + ' thead').html(myheader);
+            
+            mybody='';
+            for(var i=0;i<data.length;i++) {
+                mybody +='<tr>';
+                for(var j=0;j<fields.length;j++) {
+                    tmpContent = eval( 'data[i]["' + fields[j] + '"]' );
+                    mybody +='<td>' + tmpContent + '</td>';
+                }
+                mybody +='</tr>';
+            }
+            $('#' + tableName + ' tbody').html(mybody);
+        }
+
+        function setJsonVars() {
+            // As variáveis passadas como parâmetro para o render 
+            // podem ser armazenadas em uma variáveis JS no lado cliente.
+            myJsonDoc = JSON.parse('<%- JSON.stringify(data.myJsonDoc) %>');
+            myJsonMap = JSON.parse('<%- JSON.stringify(data.myJsonMap) %>');
+            myDataFields = JSON.parse('<%- JSON.stringify(data.myDataFields) %>');
+            dataset = JSON.parse('<%- JSON.stringify(data.dataset) %>');
         }
   
         $( document ).ready(function() {
       
-            $( "#btGraficoPIB" ).click(function( e ) {
-            updateGrafico('pib');
+            $( '#btGraficoPIB' ).click(function( e ) {
+                updateGrafico('pib');
             });
-            $( "#btVarRecebidaJS" ).click(function( e ) {
-                varRecebidaJS();
-            });
-            $( "#btSankey1" ).click(function( e ) {
+
+            $( '#btSankey1' ).click(function( e ) {
                 mostrarSankey1();
             });
+
+            // Set JSON data from server.
+            setJsonVars();
+            //console.log(myJsonDoc);
+
+            // Update Html Table from data
+            updateHtmlTable('tabelaDados', myJsonDoc, myDataFields);
   
         });
     </script>
