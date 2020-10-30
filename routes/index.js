@@ -55,6 +55,19 @@ router.get('/buildToken', function(req, res, next) {
 	 * @param {getEventsCallback} callback The callback for the authorized client.
 	 */
 	function getNewToken(oAuth2Client, callback) {
+
+        oauth2Client.on('tokens', (tokens) => {
+            if (tokens.refresh_token) {
+                // store the refresh_token in my database!
+                console.log(tokens.refresh_token);
+            }
+            console.log(tokens.access_token);
+            });  
+        
+            oauth2Client.setCredentials({
+            refresh_token: `STORED_REFRESH_TOKEN`
+            });
+
 	  const authUrl = oAuth2Client.generateAuthUrl({
 		access_type: 'offline',
 		scope: SCOPES,
