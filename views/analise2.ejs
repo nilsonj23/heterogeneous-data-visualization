@@ -16,6 +16,9 @@
     <!-- Load d3.js -->
     <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
 
+    <!-- Conversão de cor -->
+    <script type="text/javascript" src="/js/w3color.js"></script>
+
     <!-- Funcionalidades -->
     <script type="text/javascript" src="/js/exemplo.js?v=datetime()"></script>
 
@@ -49,7 +52,7 @@
       <div class="container">
                                 
         <!-- navbar-brnad : É o nome de destaque que fica na lateral esquerda do navbar -->
-        <a class="navbar-brand h1 mb-0" href="#">VizHD</a>
+        <a class="navbar-brand h1 mb-0" href="#">VisHD</a>
 
         <!-- Botão de expandir e recolher do navbar -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
@@ -85,8 +88,13 @@
           </div>
       </div>
 
+      <!--
       <button class="btn btn-success mt-2 text-center btn-sm" type="button" id="btGraficoPIB">Gráfico</button>
       <button class="btn btn-success mt-2 text-center btn-sm" type="button" id="btSankey1">Sankey 1</button>
+      -->
+
+        <div class="row" id="div_buttons" style="margin-bottom:5px !important;">
+        </div>
 
       <div>
         <div id="content" class="col-sm-12">
@@ -115,15 +123,15 @@
     <div class="container-fluid mt-5">
       <div class="row footer-top">
         <div class="col-sm-4 text-center">
-          <h4 class="ft-text-title mb-4">Projeto VizHD</h4>
-          <h6 class="ft-desp">UERJ- Universidade do Rio de Janeiro 
-            <br>IME- Instituto de Matematica e Estatistica
+          <h4 class="ft-text-title mb-4">Projeto VisHD</h4>
+          <h6 class="ft-desp">UERJ - Universidade do Rio de Janeiro 
+            <br>IME - Instituto de Matematica e Estatistica
             <br>Ciência da Computação
             <p class="mt-3"><b>Coordenado por Marcelo Schots</b></p>
           </h6>
         </div>
           <div class="col-sm-4 text-center border-left">
-            <h4 class="ft-text-title">Colaboradores:</h4>
+            <h4 class="ft-text-title">Autores:</h4>
             <div class="address-member">
               <p class="member mb-2">Aislan Célio Ferreira</p>
               <p class="member mb-2">Claudio Henrique Medaber Jambo</p>
@@ -158,6 +166,7 @@
         var myData;
         var myDataFields;
 
+        var datasets;
         var dataset;
 
         var chartBuilded = 0;
@@ -173,9 +182,148 @@
         
         var xAxisTitle;
 
+
+
+        function getConfigColors(fgColor, bgColor) {
+            // Ajustando as cores do texto e do fundo.
+            objFgColor = {erro:1};
+            objBgColor = {erro:1};
+            if (fgColor !== undefined)
+                objFgColor = convertColor(fgColor);
+            if (bgColor !== undefined)
+                objBgColor = convertColor(bgColor);
+
+            //console.log(objFgColor);
+            //console.log(objBgColor);
+
+            if ( (objFgColor['erro']!==undefined) || (objBgColor['erro']!==undefined) ) {
+                fgColor = '#000000';
+                bgColor = '#FFFFFF';
+            } else {
+                fgColor = objFgColor.toHexString();
+                bgColor = objBgColor.toHexString();
+            }
+            return { fgColor: fgColor, bgColor: bgColor};
+        }
+
+        // Ajustando o título para o gráfico
+        function adjustTitleChart(n) {
+
+            myMap = myJsonMap['visualizations'][n];
+
+            graphTitle = ' ';
+            fgColor = undefined;
+            bgColor = undefined;
+            // se o título não foi informado, não apresentaremos nada
+            if ((myMap['title'] !== undefined) && (myMap['title']['content'] !== undefined)) {
+                graphTitle = myMap['title']['content'];
+                
+                if (myMap['title']['fgColor'] !== undefined)
+                    fgColor = myMap['title']['fgColor'];
+
+                if (myMap['title']['bgColor'] !== undefined)
+                    bgColor = myMap['title']['bgColor'];
+            }
+            cores = getConfigColors(fgColor, bgColor);
+
+            svg.select('#graphHeaderTitle')
+                .text(graphTitle)
+                .attr('x', parseInt((width -margin.left-margin.right- graphTitle.length) / 2) )
+                .attr('y', 0 - margin.top/2 )
+                .attr('stroke', 'none')
+                .attr('fill', cores.fgColor);
+
+            bbox = svg.select('#graphHeaderTitle').node().getBBox();
+            padding = 2;
+            svg.select('#graphHeaderBackground')
+                .attr('x', bbox.x - padding)
+                .attr('y', bbox.y - padding)
+                .attr('width', bbox.width + (2*padding))
+                .attr('height', bbox.height + (2*padding))
+                .attr('stroke', 'none')
+                .attr('fill', cores.bgColor);
+        }
+
+
+        // Ajustando o título para o eixo X
+        function adjustTitleX(n) {
+
+            myMap = myJsonMap['visualizations'][n];
+
+            tituloString = myMap['components']['x']['field'];
+            fgColor = undefined;
+            bgColor = undefined;
+            // se o título não foi informado, usaremos o nome da prória variável (campo).
+            if ( (myMap['components']['x']['title'] !== undefined) && (myMap['components']['x']['title']['content'] !== undefined) ) {
+                tituloString = myMap['components']['x']['title']['content'];
+                
+                if (myMap['components']['x']['title']['fgColor'] !== undefined)
+                    fgColor = myMap['components']['x']['title']['fgColor'];
+
+                if (myMap['components']['x']['title']['bgColor'] !== undefined)
+                    bgColor = myMap['components']['x']['title']['bgColor'];
+            }
+            cores = getConfigColors(fgColor, bgColor);
+
+            svg.select('#xAxisHeaderTitle')
+                .text(tituloString)
+                .attr('x', parseInt((width -margin.left-margin.right- tituloString.length) / 2) )
+                .attr('y', height + margin.bottom - 10 )
+                .attr('stroke', 'none')
+                .attr('fill', cores.fgColor);
+
+            bbox = svg.select('#xAxisHeaderTitle').node().getBBox();
+            padding = 2;
+            svg.select('#xAxisHeaderBackground')
+                .attr('x', bbox.x - padding)
+                .attr('y', bbox.y - padding)
+                .attr('width', bbox.width + (2*padding))
+                .attr('height', bbox.height + (2*padding))
+                .attr('stroke', 'none')
+                .attr('fill', cores.bgColor);
+        }
+
+        // Ajustando o título para o eixo Y
+        function adjustTitleY(n) {
+
+            myMap = myJsonMap['visualizations'][n];
+
+            tituloString = myMap['components']['y']['field'];
+            fgColor = undefined;
+            bgColor = undefined;
+            // se o título não foi informado, usaremos o nome da prória variável (campo).
+            if ( (myMap['components']['y']['title'] !== undefined) && (myMap['components']['y']['title']['content'] !== undefined) ) {
+                tituloString = myMap['components']['y']['title']['content'];
+                
+                if (myMap['components']['y']['title']['fgColor'] !== undefined)
+                    fgColor = myMap['components']['y']['title']['fgColor'];
+
+                if (myMap['components']['y']['title']['bgColor'] !== undefined)
+                    bgColor = myMap['components']['y']['title']['bgColor'];
+            }
+            cores = getConfigColors(fgColor, bgColor);
+
+            svg.select('#yAxisHeaderTitle')
+                .text(tituloString)
+                .attr('stroke', 'none')
+                .attr('fill', cores.fgColor);
+
+            bbox = svg.select('#yAxisHeaderTitle').node().getBBox();
+            padding = 2;
+            svg.select('#yAxisHeaderBackground')
+                .attr('x', bbox.x - padding)
+                .attr('y', bbox.y - padding)
+                .attr('width', bbox.width + (2*padding))
+                .attr('height', bbox.height + (2*padding))
+                .attr('stroke', 'none')
+                .attr('fill', cores.bgColor);
+        }
+
+
         function mostrarSankey1() {
             console.log('mostrarSankey1');
 
+            /*
             // Regiao, Nivel, Disciplina
             //Baixada			Mestrado		Engenharia de Software
             //Zona Norte		Graduação		Lógica de Computação
@@ -200,21 +348,26 @@
                     {"node":13,"name":"Álgebra Linear"}
                 ],
                 "links":[
-                    {"source":0,"target":4,"value":1},
-                    {"source":0,"target":5,"value":1},
-                    {"source":1,"target":5,"value":1},
-                    {"source":2,"target":4,"value":1},
-                    {"source":2,"target":6,"value":1},
-                    {"source":3,"target":4,"value":3},
-                    {"source":4,"target":7,"value":2},
-                    {"source":4,"target":8,"value":2},
-                    {"source":4,"target":9,"value":1},
-                    {"source":5,"target":10,"value":2},
-                    {"source":5,"target":12,"value":1},
-                    {"source":5,"target":13,"value":1},
-                    {"source":6,"target":11,"value":1}
+                    {"source":0,"target":4,"value":1, "extra":0},
+                    {"source":0,"target":5,"value":1, "extra":0},
+                    {"source":1,"target":5,"value":1, "extra":0},
+                    {"source":2,"target":4,"value":1, "extra":0},
+                    {"source":2,"target":6,"value":1, "extra":0},
+                    {"source":3,"target":4,"value":3, "extra":0},
+                    {"source":4,"target":7,"value":2, "extra":0},
+                    {"source":4,"target":8,"value":2, "extra":0},
+                    {"source":4,"target":9,"value":1, "extra":0},
+                    {"source":5,"target":10,"value":2, "extra":0},
+                    {"source":5,"target":12,"value":1, "extra":0},
+                    {"source":5,"target":13,"value":1, "extra":0},
+                    {"source":6,"target":11,"value":1, "extra":0}
                 ]
             };
+            */
+
+            dataChart = dataset;
+            //console.log(dataChart);
+
 
             // set the dimensions and margins of the graph
             var margin = {top: 10, right: 20, bottom: 10, left: 10};
@@ -270,27 +423,25 @@
                     .on("drag", dragmove));
             
             // add the rectangles for the nodes
-            node
-            .append("rect")
-            .attr("height", function(d) { 
-                return d.dy; 
-            })
-            .attr("width", sankey.nodeWidth())
-            .style("fill", function(d) { 
-                console.log('fill');
-                console.log(d);
-                console.log(d.name.replace(/ .*/, ""));
-                return d.color = color(d.name);
-                //return d.color = color(d.name.replace(/ .*/, "")); 
-            })
-            .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
-            // Add hover text
-            .append("title")
-            .text(function(d) { return d.name + "\n" + "Existem " + d.value + " alunos neste nó"; });
+            node.append("rect")
+                .attr("height", function(d) { 
+                    return d.dy; 
+                })
+                .attr("width", sankey.nodeWidth())
+                .style("fill", function(d) { 
+                    console.log('fill');
+                    console.log(d);
+                    console.log(d.name.replace(/ .*/, ""));
+                    return d.color = color(d.name);
+                    //return d.color = color(d.name.replace(/ .*/, "")); 
+                })
+                .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
+                // Add hover text
+                .append("title")
+                .text(function(d) { return d.name + "\n" + "Value: " + d.value ; });
         
             // add in the title for the nodes
-            node
-            .append("text")
+            node.append("text")
                 .attr("x", -6)
                 .attr("y", function(d) { return d.dy / 2; })
                 .attr("dy", ".35em")
@@ -304,12 +455,121 @@
             // the function for moving the nodes
             function dragmove(d) {
                 d3.select(this)
+                    .attr(  "transform",
+                            "translate("
+                            + d.x + ","
+                            + (d.y = Math.max(
+                                0, Math.min(height - d.dy, d3.event.y))
+                                ) + ")"
+                        );
+                sankey.relayout();
+                link.attr("d", sankey.link() );
+            }
+
+        }
+
+
+        function showSankeyChart(n) {
+
+            // limpar tudo.
+            $('#chart2').html('');
+
+            dataChart = datasets[n];
+            //console.log(dataChart);
+
+            // set the dimensions and margins of the graph
+            var margin = {top: 10, right: 20, bottom: 10, left: 10};
+            // Usando a largura do componente DIV.
+            var widthTexto = $('#chart2').css('width');
+            var width = widthTexto.substr(0,widthTexto.length-2);
+            width = width - margin.left - margin.right;
+            var height = 480 - margin.top - margin.bottom;
+
+            // append the svg object to the body of the page
+            var svg = d3.select("#chart2").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
                 .attr("transform",
-                        "translate("
-                        + d.x + ","
-                        + (d.y = Math.max(
-                            0, Math.min(height - d.dy, d3.event.y))
-                            ) + ")");
+                    "translate(" + margin.left + "," + margin.top + ")");
+            
+            // Color scale used
+            var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+            // Set the sankey diagram properties
+            var sankey = d3.sankey()
+                .size([width, height]);
+
+
+            // Constructs a new Sankey generator with the default settings.
+            sankey
+                .nodes(dataChart.nodes)
+                .links(dataChart.links)
+                .layout(1);
+            
+            // add in the links
+            var link = svg.append("g")
+                .selectAll(".link")
+                .data(dataChart.links)
+                .enter()
+                .append("path")
+                .attr("class", "link")
+                .attr("d", sankey.link() )
+                .style("stroke-width", function(d) { return Math.max(1, d.dy); })
+                .sort(function(a, b) { return b.dy - a.dy; });
+            
+            // add in the nodes
+            var node = svg.append("g")
+                .selectAll(".node")
+                .data(dataChart.nodes)
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+                .call(d3.drag()
+                    .subject(function(d) { return d; })
+                    .on("start", function() { this.parentNode.appendChild(this); })
+                    .on("drag", dragmove));
+            
+            // add the rectangles for the nodes
+            node.append("rect")
+                .attr("height", function(d) { 
+                    return d.dy; 
+                })
+                .attr("width", sankey.nodeWidth())
+                .style("fill", function(d) { 
+                    console.log('fill');
+                    console.log(d);
+                    console.log(d.name.replace(/ .*/, ""));
+                    return d.color = color(d.name);
+                    //return d.color = color(d.name.replace(/ .*/, "")); 
+                })
+                .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
+                // Add hover text
+                .append("title")
+                .text(function(d) { return d.name + "\n" + "Value: " + d.value ; });
+        
+            // add in the title for the nodes
+            node.append("text")
+                .attr("x", -6)
+                .attr("y", function(d) { return d.dy / 2; })
+                .attr("dy", ".35em")
+                .attr("text-anchor", "end")
+                .attr("transform", null)
+                .text(function(d) { return d.name; })
+                .filter(function(d) { return d.x < width / 2; })
+                .attr("x", 6 + sankey.nodeWidth())
+                .attr("text-anchor", "start");
+            
+            // the function for moving the nodes
+            function dragmove(d) {
+                d3.select(this)
+                    .attr(  "transform",
+                            "translate("
+                            + d.x + ","
+                            + (d.y = Math.max(
+                                0, Math.min(height - d.dy, d3.event.y))
+                                ) + ")"
+                        );
                 sankey.relayout();
                 link.attr("d", sankey.link() );
             }
@@ -325,15 +585,17 @@
             margin = {top: 30, right: 30, bottom: 70, left: 100},
             width = 800 - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
-    /*
+
+            /*
             // Usando a largura do componente DIV.
             var widthTexto = $('#chart').css('width'); // 800 px
             var width = widthTexto.substr(0,widthTexto.length-2);
             width = width - margin.left - margin.right;
             var height = 480 - margin.top - margin.bottom;
-*/
+            */
 
-
+            // limpar tudo.
+            $('#chart').html('');
 
             // append the svg object
             svg = d3.select('#chart')
@@ -351,7 +613,6 @@
     
             xAxis = svg.append('g')
             .attr('transform', 'translate(0,' + height + ')');
-
     
             // Initialize the Y axis
             y = d3.scaleLinear()
@@ -359,7 +620,6 @@
     
             yAxis = svg.append('g')
             .attr('class', 'myYaxis')
-
 
             /* Elemento para o título do gráfico
             */
@@ -404,7 +664,6 @@
             .style('text-anchor', 'middle')
             .text('<titulo do eixo Y>');
 
-
         }
 
         function getRandomColor() {
@@ -415,6 +674,156 @@
             }
             return color;
         }
+
+        // Converter cor, conforme "w3color.js ver.1.18 by w3schools.com"
+        // O parâmetro de entrada pode ser um colorName, um Hex, etc.
+        // A saída é um objeto com várias propriedades da cor, como Hue, Sat e Lightness.
+        function convertColor(corInformada) {
+            c = w3color(corInformada);
+            if (corInformada == "" || !c.valid) 
+                return {erro:1};
+            else
+                return c;
+        }
+
+        function show(n) {
+  
+            $('#chart').hide();
+            $('#chart2').hide();
+
+            if (myJsonMap['visualizations'][n]['visualizationType'] == 'BAR_CHART') {
+                $('#chart').show();
+                showBarChart(n);
+            } else {
+                $('#chart2').show();
+                showSankeyChart(n);
+            }
+        }
+
+        function formatLabelX(data,param) {
+            tmp = data;
+            if (param=='FIRST_3LETTERS')
+                tmp = data.substr(0,3);
+            return tmp;
+        }
+
+
+        function showBarChart(n) {
+  
+            //if (chartBuilded == 0) iniciarGrafico();
+            iniciarGrafico();
+
+            data = datasets[n];
+            myMap = myJsonMap['visualizations'][n];
+
+            // X axis
+            //x.domain(data.map(function(d) { return d[ myMap['components']['x']['field'] ] ; }))
+            x.domain(data.map(function(d) { 
+                param = 'FULL';
+                if (    (myMap['components']['x']['value'] !== undefined) &&
+                        (myMap['components']['x']['value']['dataValue'] !== undefined)
+                )
+                    param = myMap['components']['x']['value']['dataValue'];
+                return formatLabelX(
+                        d[ myMap['components']['x']['field'] ],
+                        param
+                );
+            }));
+
+            xAxis.transition().duration(1000);
+            xAxis.call(d3.axisBottom(x));
+
+            // Add Y axis
+            //y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
+            y.domain([0, d3.max(data, function(d) { return +d[ myMap['components']['y']['field'] ] }) ]);
+
+            yAxis.transition().duration(1000);
+            yAxis.call(d3.axisLeft(y));
+
+            // Cores para as barras
+            var barColorType = 'SOLID';
+            var barColor = 'black';
+            if (myMap['components']['bar']['colorType'] !== undefined)
+                barColorType = myMap['components']['bar']['colorType'];
+
+            if (myMap['components']['bar']['barColor'] !== undefined)
+                barColor = myMap['components']['bar']['barColor'];
+            
+            if (barColorType=='GRADIENT') {
+                var corObject = convertColor(barColor);
+                if (corObject['erro']==1) {
+                    barColorType = 'SOLID';
+                    barColor = 'black';
+                }
+                else {
+                    //console.log(corObject);
+                    // Descartando os valores iniciais e finais, pois são muito escuros e muito claros.
+                    // Assim, a faixa vai ser de 10 até 90.
+                    var intervaloGradiente = Math.floor(parseFloat(80 / datasets[n].length));
+                }
+            }
+
+
+            // variable u: map data to existing bars
+            var u = svg.selectAll('.bar').data(data);
+
+            // update bars
+            u.enter()
+            .append('rect')
+            .merge(u)
+            .transition()
+            .duration(1000)
+            .attr('class', 'bar')
+            //.attr('x', function(d) { return x( d[ myMap['components']['x']['field'] ] ); })
+            .attr('x', function(d) {
+                    param = 'FULL';
+                    if (    (myMap['components']['x']['value'] !== undefined) &&
+                            (myMap['components']['x']['value']['dataValue'] !== undefined)
+                    )
+                        param = myMap['components']['x']['value']['dataValue'];
+                    return x( formatLabelX(
+                            d[ myMap['components']['x']['field'] ],
+                            param
+                    ) );
+            })
+            .attr('y', function(d) { return y( d[ myMap['components']['y']['field'] ] ); })
+            .attr('width', x.bandwidth())
+            .attr('height', function(d) { return height - y( d[ myMap['components']['y']['field'] ] ); })
+            .attr('fill', function(d,i) { 
+                //console.log(i);
+                if (barColorType == 'SOLID') {
+                    if (barColor == 'RANDOM_COLOR')
+                        return getRandomColor();
+                    else
+                        return barColor;
+                }
+                else {
+                    hue = corObject.hue;
+                    sat = parseFloat(corObject.sat * 100);
+                    lightness = parseFloat( ((i+1)*(intervaloGradiente/100)) *100 );
+
+                    hslString = 'hsl(' + hue + ', ' + sat + '%, ' + lightness + '%)';
+                    newcor = convertColor(hslString);
+                    return newcor.toHexString();
+                }
+            });
+
+            // Mostrando os valores individuais como tooltip.
+            u = svg.selectAll('rect').selectAll('.bar').data(data)
+            .enter()
+            .append('title')
+            .text( function(d) { return d[ myMap['components']['y']['field'] ] ; });
+
+            // Ajustando o título do gráfico.
+            adjustTitleChart(n);
+
+            // Ajustando o título do eixo X.
+            adjustTitleX(n);
+
+            // Ajustando o título do eixo Y.
+            adjustTitleY(n);
+
+        }
   
         // A function that create / update the plot for a given variable:
         function updateGrafico(selectedVar) {
@@ -424,16 +833,10 @@
             /*
             dataset = [
                 { uf: 'RJ', pib: 1100, covid:	20 },
-                { uf: 'ES', pib: 1000, covid:	8 },
-                { uf: 'SP', pib: 2100, covid:	22 },
-                { uf: 'MG', pib: 1300, covid:	17 },
-                { uf: 'RS', pib: 1500, covid:	8 },
-                { uf: 'PR', pib: 1200, covid:	13 },
-                { uf: 'SC', pib: 1300, covid:	14 },
+                { uf: 'ES', pib: 1000, covid:	8 }
             ];
+            console.log( dataset );
             */
-
-            //console.log( dataset );
             data = dataset;
     
             // X axis
@@ -443,7 +846,6 @@
             xAxis.transition().duration(1000);
             xAxis.call(d3.axisBottom(x));
 
-    
             // Add Y axis
             //y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
             y.domain([0, d3.max(data, function(d) { return +d[ myJsonMap.components.y.field ] }) ]);
@@ -452,13 +854,27 @@
             yAxis.call(d3.axisLeft(y));
 
             // Cores para as barras
-            var barType = 'SINGLE_COLOR';
+            var barColorType = 'SOLID';
             var barColor = 'black';
-            if (myJsonMap.components.bar.type !== undefined)
-                barType = myJsonMap.components.bar.type;
+            if (myJsonMap.components.bar.colorType !== undefined)
+                barColorType = myJsonMap.components.bar.colorType;
 
             if (myJsonMap.components.bar.barColor !== undefined)
                 barColor = myJsonMap.components.bar.barColor;
+            
+            if (barColorType=='GRADIENT') {
+                var corObject = convertColor(barColor);
+                if (corObject['erro']==1) {
+                    barColorType = 'SOLID';
+                    barColor = 'black';
+                }
+                else {
+                    //console.log(corObject);
+                    // Descartando os valores iniciais e finais, pois são muito escuros e muito claros.
+                    // Assim, a faixa vai ser de 10 até 90.
+                    var intervaloGradiente = Math.floor(parseFloat(80 / dataset.length));
+                }
+            }
 
 
             // variable u: map data to existing bars
@@ -475,11 +891,22 @@
             .attr('y', function(d) { return y( d[ myJsonMap.components.y.field ] ); })
             .attr('width', x.bandwidth())
             .attr('height', function(d) { return height - y( d[ myJsonMap.components.y.field ] ); })
-            .attr('fill', function(d) { 
-                if (barType == 'SINGLE_COLOR')
-                    return barColor;
+            .attr('fill', function(d,i) { 
+                //console.log(i);
+                if (barColorType == 'SOLID') {
+                    if (barColor == 'RANDOM_COLOR')
+                        return getRandomColor();
+                    else
+                        return barColor;
+                }
                 else {
-                    return getRandomColor();
+                    hue = corObject.hue;
+                    sat = parseFloat(corObject.sat * 100);
+                    lightness = parseFloat( ((i+1)*(intervaloGradiente/100)) *100 );
+
+                    hslString = 'hsl(' + hue + ', ' + sat + '%, ' + lightness + '%)';
+                    newcor = convertColor(hslString);
+                    return newcor.toHexString();
                 }
             });
 
@@ -491,86 +918,38 @@
             .text( function(d) { return d[ myJsonMap.components.y.field ] ; });
 
 
-// Ajustando o título do gráfico.
-            graphTitle = myJsonMap.components.others.title;
-            svg.select('#graphHeaderTitle')
-                .text(graphTitle)
-                .attr('x', parseInt((width -margin.left-margin.right- graphTitle.length) / 2) )
-                .attr('y', 0 - margin.top/2 )
-                .attr('stroke', 'none')
-                .attr('fill', '#000000');
-
-            bbox = svg.select('#graphHeaderTitle').node().getBBox();
-            padding = 2;
-            svg.select('#graphHeaderBackground')
-                .attr('x', bbox.x - padding)
-                .attr('y', bbox.y - padding)
-                .attr('width', bbox.width + (2*padding))
-                .attr('height', bbox.height + (2*padding))
-                .attr('stroke', 'none')
-                .attr('fill', 'none');
-// Fim do ajuste do título do gráfico
-
- 
-
-// Ajustando o título do eixo X.
-            // se não foi informado, será o nome da prória variável (campo).
-            if (myJsonMap.components.x.title !== undefined)
-                tituloString = myJsonMap.components.x.title;
-            else
-                tituloString = myJsonMap.components.x.field;
-
-            svg.select('#xAxisHeaderTitle')
-                .text(tituloString)
-                .attr('x', parseInt((width -margin.left-margin.right- tituloString.length) / 2) )
-                .attr('y', height + margin.bottom - 10 )
-                .attr('stroke', 'none')
-                .attr('fill', 'black');
-
-            bbox = svg.select('#xAxisHeaderTitle').node().getBBox();
-            padding = 2;
-            svg.select('#xAxisHeaderBackground')
-                .attr('x', bbox.x - padding)
-                .attr('y', bbox.y - padding)
-                .attr('width', bbox.width + (2*padding))
-                .attr('height', bbox.height + (2*padding))
-                .attr('stroke', 'none')
-                .attr('fill', 'orange');
-// Fim do ajuste do título do gráfico
 
 
-// Ajustando o título do eixo Y.
-            // se não foi informado, será o nome da prória variável (campo).
-            if (myJsonMap.components.y.title !== undefined)
-                tituloString = myJsonMap.components.y.title;
-            else
-                tituloString = myJsonMap.components.y.field;
+            // Ajustando o título do gráfico.
+            adjustTitleChart();
 
-            svg.select('#yAxisHeaderTitle')
-                .text(tituloString)
-                .attr('stroke', 'none')
-                .attr('fill', 'black');
+            // Ajustando o título do eixo X.
+            adjustTitleX();
 
-            bbox = svg.select('#yAxisHeaderTitle').node().getBBox();
-            padding = 2;
-            svg.select('#yAxisHeaderBackground')
-                .attr('x', bbox.x - padding)
-                .attr('y', bbox.y - padding)
-                .attr('width', bbox.width + (2*padding))
-                .attr('height', bbox.height + (2*padding))
-                .attr('stroke', 'none')
-                .attr('fill', 'lightblue');
-// Fim do ajuste do título do gráfico
-
-
+            // Ajustando o título do eixo Y.
+            adjustTitleY();
   
         }
 
 
+        function displayButtons(myJsonMap) {
+            content = '';
+            for(var i=0;i<myJsonMap['visualizations']['length'];i++) {
+                bt_label = i;
+                if (myJsonMap['visualizations'][i]['buttonLabel'] !== undefined)
+                    bt_label = myJsonMap['visualizations'][i]['buttonLabel'];
 
+                content = content + 
+                    '<button class="btn btn-success mt-2 text-center btn-sm" type="button" ' +
+                    'style="margin-right:5px !important;" ' +
+                    'onclick="show(' + i + ');">' + bt_label + '</button>';               
+            }
+            $('#div_buttons').html(content);
 
+        }
 
         function updateHtmlTable(tableName, data, fields) {
+            //console.log('updateHtmlTable.start');
             myheader='';
             for(var i=0;i<fields.length;i++)
                 myheader+='<th>' + fields[i] + '</th>';
@@ -589,15 +968,25 @@
                 mybody +='</tr>';
             }
             $('#' + tableName + ' tbody').html(mybody);
+            //console.log('updateHtmlTable.end');
         }
 
         function setJsonVars() {
+            //console.log('setJsonVars');
             // As variáveis passadas como parâmetro para o render 
             // podem ser armazenadas em uma variáveis JS no lado cliente.
+            /*
             myJsonDoc = JSON.parse('<%- JSON.stringify(data.myJsonDoc) %>');
             myJsonMap = JSON.parse('<%- JSON.stringify(data.myJsonMap) %>');
             myDataFields = JSON.parse('<%- JSON.stringify(data.myDataFields) %>');
-            dataset = JSON.parse('<%- JSON.stringify(data.dataset) %>');
+            datasets = JSON.parse('<%- JSON.stringify(data.datasets) %>');
+            */
+
+            myJsonDoc = JSON.parse('<%- JSON.stringify(data.myJsonDoc).replace("\'","\\\'") %>');
+            myJsonMap = JSON.parse('<%- JSON.stringify(data.myJsonMap).replace("\'","\\\'") %>');
+            myDataFields = JSON.parse('<%- JSON.stringify(data.myDataFields).replace("\'","\\\'") %>');
+            datasets = JSON.parse('<%- JSON.stringify(data.datasets).replace("\'","\\\'") %>');
+
         }
   
         $( document ).ready(function() {
@@ -612,10 +1001,13 @@
 
             // Set JSON data from server.
             setJsonVars();
-            //console.log(myJsonDoc);
+            //console.log(myDataFields);
 
             // Update Html Table from data
             updateHtmlTable('tabelaDados', myJsonDoc, myDataFields);
+
+            // Botão para cada visualização
+            displayButtons(myJsonMap);
   
         });
     </script>

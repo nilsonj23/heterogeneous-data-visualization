@@ -22,7 +22,7 @@
     <div class="container">
 
       <!-- navbar-brnad : É o nome de destaque que fica na lateral esquerda do navbar -->
-      <a class="navbar-brand h1 mb-0" href="#">VizHD</a>
+      <a class="navbar-brand h1 mb-0" href="#">VisHD</a>
 
       <!-- Botão de expandir e recolher do navbar -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSite">
@@ -45,66 +45,68 @@
     </div>
   </nav>
 
-  <!-----------------------------------------------------  Scrollspy  ------------------------------------------------->
-
-  <div class="container">
-
-    <div class="row">
-
-      <!-- my-5 : margem em todo eixo y, tanto margem top como margem bottom -->
-      <div class="col-12 text-center my-5">
-        <h2 class="display-3"> Vizualização de Dados Heterogêneos</h2>
-        <p>Este trabalho tem como objetivo propor um método que permita o recebimento de dados heterogêneos de
-          diferentes domínios, analisar esses dados e propor diferentes tipos de visualização de acordo com os dados de
-          entrada. Para atingir este objetivo, os dados de entrada serão analisados por um mecanismo que permitirá os
-          tipos de visualização possíveis para aquele grupo de dados, então, permitirá a escolha entre as visualizações
-          de dados que são identificadas pelo mecanismo.</p>
+    <!-----------------------------------------------------  Scrollspy  ------------------------------------------------->
+      
+    <div class="container">
+    
+      <div class="row">
+      
+          <!-- my-5 : margem em todo eixo y, tanto margem top como margem bottom -->
+          <div class="col-12 my-5">
+              <h2 class="display-3 text-center">   Visualização de Dados Heterogêneos</h2>
+              <p class="abstract">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este trabalho tem como objetivo propor um sistema que utiliza JavaScript, D3 e HTML que, a partir de um arquivo de configuração JSON, extraia informações de um arquivo Google Docs e compõe uma visualização gráfica com esses dados e com as preferências definidas nas configurações. As visualizações podem ser geradas mesmo a partir de diferentes domínios de informação, desde que sigam os padrões e definições no arquivo de configuração. O sistema permite a geração de visualização de dados, mesmo heterogêneos, seguindo padrões definidos no arquivo de configuração JSON.</p>
+          </div>
       </div>
-    </div>
+      
+      <div class="jumbotron row mb-5">
+          
+          <!-- Menu Lateral 
+          <div class="col-sm-6 col-md-4 mb-3">
+              <nav id="navbarVertical" class="navbar navbar-light bg-light">
+                  
+                  <nav class="nav nav-pills flex-column">
+                      
+                      <a class="nav-link" href="#item1">Regras de recebimento do arquivo Json</a>
+                      <nav class="nav nav-pills flex-column">
+                          <a class="nav-link ml-3" href="#item1-1">Item 1-1</a>
+                          <a class="nav-link ml-3" href="#item1-2">Item 1-2</a>
+                      </nav>
+                      
+                      <a class="nav-link my-2" href="#item2">Item 2</a>
+                      </nav>
+                  </nav>
+              </nav>
+          </div>
+          -->
+      
+          <div class="col-sm-6 col-md-8">
+          
+              <div data-spy="scroll" data-target="#navbarVertical" data-offset="0" class="scrollspySite">
+                  
+                  <h4 id="item1">Regras de recebimento do arquivo JSON</h4>
 
-    <div class="jumbotron row mb-5">
+                  <ol>
+                    <li>Apenas o formato <a href="https://www.json.org/json-en.html" target="_blank">JSON</a> é permitido.</li>
 
-      <!-- Menu Lateral -->
-      <div class="col-sm-6 col-md-4 mb-3">
-        <nav id="navbarVertical" class="navbar navbar-light bg-light">
+                    <li>A tabela deve apresentar na primeira linha um cabeçalho unidimensional contendo os nomes dos campos.</li>
 
-          <nav class="nav nav-pills flex-column">
+                    <li>Os documentos devem estar no <a href="https://www.google.com/intl/pt-BR/docs/about/" target="_blank">Google Docs</a>.</li>
+                    
+                    <li>O documento deve conter pelo menos uma tabela.</li>
 
-            <a class="nav-link" href="#item1">Regras de recebimento do arquivo Json</a>
-            <nav class="nav nav-pills flex-column">
-              <a class="nav-link ml-3" href="#item1-1">Item 1-1</a>
-              <a class="nav-link ml-3" href="#item1-2">Item 1-2</a>
-            </nav>
+                    <li>O usuário deve informar o número sequencial da tabela dentro do documento.</li>
 
-            <a class="nav-link my-2" href="#item2">Item 2</a>
-          </nav>
-        </nav>
-        </nav>
-      </div>
+                    <li>O <strong>ID</strong> do documento deve ser informado no arquivo de mapeamento. Ele pode ser encontrado na URL do mesmo. 
+                        <br/><br/>Exemplo: https://docs.google.com/document/d/<strong>1_SxMIxxdZ_g6zwlPB3VTX54bi8p82XBVgADh-MZaAwk</strong>/edit</li>
 
-      <div class="col-sm-6 col-md-8">
+                    <li>A tabela não pode ter células mescladas.</li>
 
-        <div data-spy="scroll" data-target="#navbarVertical" data-offset="0" class="scrollspySite">
+                  </ol>
 
-          <h4 id="item1">Regras de recebimento do arquivo Json</h4>
-          <p>Maecenas vitae posuere turpis. Sed ut lacus egestas, vulputate erat quis, vehicula massa. Suspendisse in
-            porttitor turpis. Nulla sit amet nulla iaculis, tristique diam semper, feugiat nisi. Nam at porta odio. Sed
-            eu ultrices tortor, interdum aliquam nibh. Morbi scelerisque, ligula eget luctus pellentesque, elit lectus
-            tincidunt sapien.</p>
 
-          <h5 id="item1-1">Item 1-1</h5>
-          <p>Maecenas vitae posuere turpis. Sed ut lacus egestas, vulputate erat quis, vehicula massa. Suspendisse in
-            porttitor turpis. Nulla sit amet nulla iaculis, tristique diam semper, feugiat nisi. Nam at porta odio. Sed
-            eu ultrices tortor, interdum aliquam nibh. Morbi scelerisque, ligula eget luctus pellentesque, elit lectus
-            tincidunt sapien.</p>
 
-          <h5 id="item1-2">Item 1-2</h5>
-          <p>Maecenas vitae posuere turpis. Sed ut lacus egestas, vulputate erat quis, vehicula massa. Suspendisse in
-            porttitor turpis. Nulla sit amet nulla iaculis, tristique diam semper, feugiat nisi. Nam at porta odio. Sed
-            eu ultrices tortor, interdum aliquam nibh. Morbi scelerisque, ligula eget luctus pellentesque, elit lectus
-            tincidunt sapien.</p>
-
-        </div>
+              </div>
+          </div>
       </div>
     </div>
   </div>
@@ -123,13 +125,15 @@
               -->
               <label for="arquivoMapeamento">Arquivo Mapeamento Json:</label>
               <input type="file" class="form-control-file border" name="arquivoMapeamento">
-              <button class="btn btn-success mt-2 text-center btn-sm" type="submit">Enviar</button>
+              <button class="btn btn-success mt-2 text-center btn-sm" type="submit">Carregar</button>
             </form>
+            <!--
             <div id="res"></div>
               <form id="formulario"> </br>
                 <p>Token: <input type="text" id="valor">
                 <input type="submit" onclick="capturar()"  value="Enviar"></p>
               </form>
+              -->
 
           </div>
         </div>
@@ -137,33 +141,34 @@
     </ul>
   </div>
 
-  <!----------------------------------------------- Footer -------------------------------------------->
-  <div class="container-fluid mt-5">
-    <div class="row footer-top">
-      <div class="col-sm-4 text-center">
-        <h4 class="ft-text-title mb-4">Projeto VizHD</h4>
-        <h6 class="ft-desp">UERJ- Universidade do Rio de Janeiro
-          <br>IME- Instituto de Matematica e Estatistica
-          <br>Ciência da Computação
-          <p class="mt-3"><b>Orientado por Marcelo Schots</b></p>
-        </h6>
-      </div>
-      <div class="col-sm-4 text-center border-left">
-        <h4 class="ft-text-title">Colaboradores:</h4>
-        <div class="address-member">
-          <p class="member mb-2">Aislan Célio Ferreira</p>
-          <p class="member mb-2">Claudio Henrique Medaber Jambo</p>
-          <p class="member mb-2">Gedir Fabiano de Moraes Gonçalves</p>
-          <p class="member mb-2">Nilson Junio Souza da Silva</p>
-          <p class="member mb-2">Paulo Victor Pimentel Coelho</p>
+    <!----------------------------------------------- Footer -------------------------------------------->
+    <div class="container-fluid mt-5">
+      <div class="row footer-top">
+        <div class="col-sm-4 text-center">
+          <h4 class="ft-text-title mb-4">Projeto VisHD</h4>
+          <h6 class="ft-desp">UERJ - Universidade do Rio de Janeiro 
+            <br>IME - Instituto de Matemática e Estatística
+            <br>Ciência da Computação
+            <p class="mt-3"><b>Coordenado por Marcelo Schots</b></p>
+          </h6>
         </div>
-      </div>
-      <div class="col-sm-4 col-xs-12 text-center border-left">
-        <h4 class="ft-text-title">Sobre</h4>
-        <div class="pspt-dtls">
-          <a href="#" class="about">Artigo</a>
-          <a href="https://github.com/nilsonj23/heterogeneous-data-visualization" class="team">Git</a>
-        </div>
+          <div class="col-sm-4 text-center border-left">
+            <h4 class="ft-text-title">Autores:</h4>
+            <div class="address-member">
+              <p class="member mb-2">Aislan Célio Ferreira</p>
+              <p class="member mb-2">Claudio Henrique Medaber Jambo</p>
+              <p class="member mb-2">Gedir Fabiano de Moraes Gonçalves</p>
+              <p class="member mb-2">Nilson Junio Souza da Silva</p>
+              <p class="member mb-2">Paulo Victor Pimentel Coelho</p>
+            </div>
+          </div>
+          <div class="col-sm-4 col-xs-12 text-center border-left">
+            <h4 class="ft-text-title">Sobre</h4>
+            <div class="pspt-dtls">
+              <a href="https://www.overleaf.com/project/5f643f5245a1ac0001a631df" class="about">Artigo</a>
+              <a href="https://github.com/nilsonj23/heterogeneous-data-visualization" class="team">Git</a>
+            </div>
+          </div>
       </div>
     </div>
     <div class="row ft-copyright pt-2 pb-2" style="padding-left: 25px;">

@@ -154,6 +154,7 @@ body {
 		color: red;
 	}
 
+<<<<<<< HEAD
 #box {
 	border-radius: 4.2px;
 	box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
@@ -162,3 +163,13 @@ body {
 #btnVis {
 	margin-top: 75px;
 }
+=======
+    li {
+        margin-bottom: 1em;
+    }
+
+    .abstract {
+        line-height: 1.5em;
+        text-align: justify;
+    }
+>>>>>>> be6ae3a2297d1af19ff323da7f885fa61474da2d
